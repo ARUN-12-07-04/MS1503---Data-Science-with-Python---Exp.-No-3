@@ -1,23 +1,9 @@
-# Experiment 3 (`exp4_2.pdf`): Retail Sales and Profit Analysis Using Pandas
+# Experiment 3 : Retail Sales and Profit Analysis Using Pandas
 
-## 🎯 Aim
+## Aim
 To create a sample retail dataset, identify and handle missing values (`NaN`/`None`) and duplicate records, and compute summary statistics using Pandas in Python.
 
-## 📊 Dataset
-The raw dataset contains **8 retail order records** across **6 attributes** (`Order_ID`, `Product`, `Region`, `Sales`, `Discount`, and `Profit`), intentionally constructed with missing values and a duplicate entry (`Order_ID: 105`):
-
-| Index | Order_ID | Product | Region | Sales | Discount | Profit |
-| :---: | :---: | :--- | :--- | :---: | :---: | :---: |
-| **0** | 101 | Laptop | East | 55000.0 | 5.0 | 8000.0 |
-| **1** | 102 | Tablet | West | 32000.0 | `NaN` | 5000.0 |
-| **2** | 103 | Phone | North | `NaN` | 10.0 | 4000.0 |
-| **3** | 104 | Printer | South | 18000.0 | 8.0 | `NaN` |
-| **4** | 105 | Monitor | East | 24000.0 | 5.0 | 3000.0 |
-| **5** | 105 | Monitor | East | 24000.0 | 5.0 | 3000.0 |
-| **6** | 106 | Tablet | West | 32000.0 | `NaN` | 5000.0 |
-| **7** | 107 | Laptop | `None` | 55000.0 | 8.0 | 8000.0 |
-
-## ⚙️ Algorithm
+## Algorithm
 
 1. **Start** the program.
 2. **Import Library**: Import the `pandas` library as `pd` for tabular data cleaning and analysis.
@@ -36,31 +22,7 @@ The raw dataset contains **8 retail order records** across **6 attributes** (`Or
    * Print the cleaned DataFrame, updated dimensions (`df.shape`), and descriptive statistical metrics (`df.describe()`).
 9. **Stop** the program.
 
-### 📝 Pseudocode
-
-```text
-BEGIN
-    IMPORT pandas AS pd
-
-    INITIALIZE data ← DICTIONARY OF retail orders (with missing & duplicate rows)
-    df ← DataFrame(data)
-
-    PRINT df, df.shape
-    PRINT COUNT_NULLS(df)
-
-    FOR EACH col IN ["Sales", "Discount", "Profit"] DO
-        df[col] ← FILL_NA(df[col], MEAN(df[col]))
-    ENDFOR
-
-    df["Region"] ← FILL_NA(df["Region"], MODE(df["Region"])[0])
-    df ← DROP_DUPLICATES(df)
-
-    PRINT df, df.shape
-    PRINT DESCRIBE(df)
-END
-```
-
-## 🛠️ Functions and Methods Used
+## Functions and Methods Used
 
 | Category | Function / Method | Purpose / Description |
 | :--- | :--- | :--- |
@@ -73,96 +35,27 @@ END
 | **Deduplication & Summary** | `df.drop_duplicates()` | Identifies and removes duplicate rows from the DataFrame |
 | | `df.describe()` | Generates count, mean, standard deviation, min, quartiles, and max for numerical features |
 
-## 💻 Program / Code
+## Program
 
-```python
-# Cleaning and Preparing Retail Data using Pandas
-import pandas as pd
+#Cleaning and Preparing Retail Data using Pandas
 
-# Step 1: Create a sample retail dataset
-data = {
-    "Order_ID": [101, 102, 103, 104, 105, 105, 106, 107],
-    "Product": ["Laptop", "Tablet", "Phone", "Printer", "Monitor", "Monitor", "Tablet", "Laptop"],
-    "Region": ["East", "West", "North", "South", "East", "East", "West", None],
-    "Sales": [55000, 32000, None, 18000, 24000, 24000, 32000, 55000],
-    "Discount": [5, None, 10, 8, 5, 5, None, 8],
-    "Profit": [8000, 5000, 4000, None, 3000, 3000, 5000, 8000]
-}
+#Step 1: Create a sample retail dataset
 
-df = pd.DataFrame(data)
-print("---- Original Retail Dataset ----")
-print(df)
-print("\nDataset Shape:", df.shape)
+#Step 2: Check for missing values
 
-# Step 2: Check for missing values
-print("\nMissing Values per Column:\n", df.isnull().sum())
+#Step 3: Fill missing numeric values with column mean
 
-# Step 3: Fill missing numeric values with column mean
-df["Sales"] = df["Sales"].fillna(df["Sales"].mean())
-df["Discount"] = df["Discount"].fillna(df["Discount"].mean())
-df["Profit"] = df["Profit"].fillna(df["Profit"].mean())
+#Step 4: Fill missing Region with mode (most frequent value)
 
-# Step 4: Fill missing Region with mode (most frequent value)
-df["Region"] = df["Region"].fillna(df["Region"].mode()[0])
+#Step 5: Remove duplicate records
 
-# Step 5: Remove duplicate records
-df = df.drop_duplicates()
+#Step 6: Display summary statistics
 
-print("\n---- Cleaned Retail Dataset ----")
-print(df)
-print("\nDataset Shape after Cleaning:", df.shape)
 
-# Step 6: Display summary statistics
-print("\nSummary Statistics:\n", df.describe())
-```
 
-## 🖥️ Sample Output
+## Output
 
-```text
----- Original Retail Dataset ----
-   Order_ID  Product Region    Sales  Discount  Profit
-0       101   Laptop   East  55000.0       5.0  8000.0
-1       102   Tablet   West  32000.0       NaN  5000.0
-2       103    Phone  North      NaN      10.0  4000.0
-3       104  Printer  South  18000.0       8.0     NaN
-4       105  Monitor   East  24000.0       5.0  3000.0
-5       105  Monitor   East  24000.0       5.0  3000.0
-6       106   Tablet   West  32000.0       NaN  5000.0
-7       107   Laptop   None  55000.0       8.0  8000.0
 
-Dataset Shape: (8, 6)
-
-Missing Values per Column:
- Order_ID    0
-Product     0
-Region      1
-Sales       1
-Discount    2
-Profit      1
-dtype: int64
-
----- Cleaned Retail Dataset ----
-   Order_ID  Product Region         Sales   Discount       Profit
-0       101   Laptop   East  55000.000000   5.000000  8000.000000
-1       102   Tablet   West  32000.000000   6.833333  5000.000000
-2       103    Phone  North  34285.714286  10.000000  4000.000000
-3       104  Printer  South  18000.000000   8.000000  5142.857143
-4       105  Monitor   East  24000.000000   5.000000  3000.000000
-6       106   Tablet   West  32000.000000   6.833333  5000.000000
-7       107   Laptop   East  55000.000000   8.000000  8000.000000
-
-Dataset Shape after Cleaning: (7, 6)
-```
-
-## ✅ Result
+## Result
 The program successfully creates a retail dataset, identifies missing entries and duplicate rows, imputes missing values using mean and mode strategies, removes duplicates, and outputs a clean dataset ready for downstream analysis.
 
-## 🚀 How to Run
-1. Install Pandas (if not already installed):
-   ```bash
-   pip install pandas
-   ```
-2. Run the script:
-   ```bash
-   python exp4_2_retail_sales_cleaning.py
-   ```
